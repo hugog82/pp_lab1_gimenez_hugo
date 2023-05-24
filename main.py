@@ -27,7 +27,7 @@ def leer_archivo_json (nombre_archivo:str)->list:
 lista_jugadores = leer_archivo_json("./pp_lab1_gimenez_hugo/dt.json")
 
 
-def mostrar_nombre_y_dato(lista:list, dato:str):
+def mostrar_nombre_y_dato(lista:list, dato:str)->bool:
     '''
     - Muestra el nombre y el dato pasado por parametro.
     - Recibe una lista, una constante para formatear el print y
@@ -58,7 +58,7 @@ def mostrar_indice_y_nombre (lista:list)->bool:
     
 #mostrar_indice_y_nombre(lista_jugadores)
 
-def mostrar_nombre_un_jugador (lista:list, indice:str):
+def mostrar_nombre_un_jugador (lista:list, indice:str)->bool:
     '''
     - Muestra el nombre de un jugador.
     - Recibe una lista y el indice de la lista.
@@ -90,7 +90,6 @@ def mostrar_estadisticas_jugador (lista:list, indice:str)->bool:
         retorno = True
         
     return retorno
-
 
 mostrar_nombre_un_jugador(lista_jugadores, "0")
 mostrar_estadisticas_jugador (lista_jugadores, "0")
