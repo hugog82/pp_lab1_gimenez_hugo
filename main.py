@@ -27,17 +27,21 @@ def leer_archivo_json (nombre_archivo:str)->list:
 lista_jugadores = leer_archivo_json("pp_lab1_gimenez_hugo\dt.json")
 
 
-def mostrar_nombre_y_dato(lista:list, constante, dato:str)->bool:
+def mostrar_nombres_y_datos(lista:list, constante, dato:str)->bool:
     '''
-    - Muestra el nombre y el dato pasado por parametro.
-    - Recibe una lista, una constante para formatear el print y
-      y el dato.
-    - No retorna nada.
+    - Muestra una lista de nombre y datos.
+    - Recibe por parametro una lista, una constante para formatear el
+      print y el dato.
+    - Si la lista esta vacia retorna False.
     '''
-    for jugador in lista:
-        print("Nombre: {0} - {1}: {2}".format(jugador["nombre"], constante, jugador[dato]))
-        
-#mostrar_nombre_y_dato(lista_jugadores, "Posicion" "posicion")
+    retorno = False
+    if lista != []:
+        for jugador in lista:
+            print("Nombre: {0} - {1}: {2}".format(jugador["nombre"], constante, jugador[dato]))
+            retorno = True 
+    return retorno
+
+#mostrar_nombres_y_datos(lista_jugadores, "Posicion" "posicion")
 
 def mostrar_indice_y_nombre (lista:list)->bool:
     '''
@@ -50,18 +54,16 @@ def mostrar_indice_y_nombre (lista:list)->bool:
     if lista != []:
         for indice in range(len(lista)):
             print("Indice: {0} - Nombre: {1}".format(indice, lista[indice]["nombre"]))
-        
         retorno = True
         
     return retorno
-    
-    
+        
 #mostrar_indice_y_nombre(lista_jugadores)
 
 def mostrar_un_jugador_nombre_dato (lista:list, indice:str, dato:str)->bool:
     '''
     - Muestra el nombre de un jugador.
-    - Recibe una lista y el indice de la lista.
+    - Recibe una lista ,el indice de la lista y un dato, pj: 'posicion'
     - Retorna False si la lista esta vacia sino retorna True.
     '''
     retorno = False
@@ -71,8 +73,9 @@ def mostrar_un_jugador_nombre_dato (lista:list, indice:str, dato:str)->bool:
         print("Nombre: {0} \nPosicion: ".format(lista[indice]["nombre"]),lista[indice][dato])
         retorno = True
     return retorno
-    
 
+#mostrar_un_jugador_nombre_dato(lista_jugadores, "1", "posicion")
+    
 def mostrar_estadisticas_jugador (lista:list, indice:str)->dict:
     '''
     - Muestra las estadisticas de un jugador.
@@ -246,314 +249,8 @@ def dividir(dividendo:int, divisor:int):
     
     return retorno
  
-#05
-def obtener_promedio_puntos_partidos_del_equipo (lista:list, dato:str)->float:
-    ''' 
-    - Calcula el promedio del dato recibido en la lista.
-    - Recibe como parametros una lista y el dato a calcular.
-    - Retorna el promedio calculado.
-    - Si la lista esta vacia retorna -1.
-    '''
-    retorno = -1
-
-    if lista != []:
-        suma = sumar_dato_jugador(lista, dato)
-        cantidad = len(lista)
-        promedio = dividir(suma, cantidad)
-        retorno = promedio
-    
-    return retorno
-
-#print(obtener_promedio_puntos_partidos_del_equipo (lista_jugadores, "promedio_puntos_por_partido"))
-
-def es_miembro_salon_de_la_fama (lista_jugadores:list, nombre:str)->bool:
-    '''
-    - Evalua si el jugador buscado es miembro del salon de la fama.
-    - Recibe una lista de jugadores y el nombre a evaluar.
-    - Retorna None si la lista esta vacia. False si no es miembro y
-      True si es miembro.
-      
-    '''
-    retorno = None
-    
-    if lista_jugadores != []:
-        retorno = False
-        for jugador in lista_jugadores:
-            if re.search(nombre, jugador["nombre"], re.I) != None:
-                for valor in jugador["logros"]:
-                    if re.search("miembro", valor, re.I) != None:
-                        retorno = True
-    return retorno
-
-#print(es_miembro_salon_de_la_fama (lista_jugadores, "michael"))
-#07 rebotes totales
-def obtener_jugador_mayor_dato (lista_jugadores:list, dato:str)->dict:
-    '''
-    -
-    '''
-    retorno = None
-    mayor_dato = 0
-        
-    if lista_jugadores != []:
-        for jugador in lista_jugadores:
-            for valor in jugador["estadisticas"]:
-                if valor == dato and jugador["estadisticas"][valor] > mayor_dato:
-                        mayor_dato = jugador["estadisticas"][valor]
-                        retorno = jugador
-        return retorno
-
-# jugador = obtener_jugador_mayor_dato(lista_jugadores, "rebotes_totales")
-# print(jugador)
-# print("Nombre: {0} - Rebotes Totales: {1}".format(jugador["nombre"], jugador["estadisticas"]["rebotes_totales"]))
-
-#08 tiros de campo
-def obtener_jugador_mayor_dato (lista_jugadores:list, dato:str)->dict:
-    '''
-    -
-    '''
-    retorno = None
-    mayor_dato = 0
-        
-    if lista_jugadores != []:
-        for jugador in lista_jugadores:
-            for valor in jugador["estadisticas"]:
-                if valor == dato and jugador["estadisticas"][valor] > mayor_dato:
-                        mayor_dato = jugador["estadisticas"][valor]
-                        retorno = jugador
-        return retorno
-
-# jugador = obtener_jugador_mayor_dato(lista_jugadores, "porcentaje_tiros_de_campo")
-# print(jugador)
-# print("Nombre: {0} - Tiros de Campo: {1}".format(jugador["nombre"], jugador["estadisticas"]["porcentaje_tiros_de_campo"]))
-
-#09 asistencia totoles
-def obtener_jugador_mayor_dato (lista_jugadores:list, dato:str)->dict:
-    '''
-    -
-    '''
-    retorno = None
-    mayor_dato = 0
-        
-    if lista_jugadores != []:
-        for jugador in lista_jugadores:
-            for valor in jugador["estadisticas"]:
-                if valor == dato and jugador["estadisticas"][valor] > mayor_dato:
-                        mayor_dato = jugador["estadisticas"][valor]
-                        retorno = jugador
-        return retorno
-
-# jugador = obtener_jugador_mayor_dato(lista_jugadores, "asistencias_totales")
-# print("Nombre: {0} - Asistencias Totales: {1}".format(jugador["nombre"], jugador["estadisticas"]["asistencias_totales"]))
-
-#10 Permitir al usuario ingresar un valor y mostrar los jugadores 
-# que han promediado más puntos por partido que ese valor
-def obtener_mayores (lista_jugadores:list, numero:str)->list:
-    '''
-    -
-    '''
-    retorno = None
-    nueva_lista = []
-    numero = float(numero)
-    
-    if lista_jugadores != []:
-        for jugador in lista_jugadores:
-            for valor in jugador["estadisticas"]:
-                if valor == "promedio_puntos_por_partido" and jugador["estadisticas"][valor] > numero:
-                    nueva_lista.append(jugador)
-                    retorno = nueva_lista
-                    #print(retorno)
-    return retorno
-            
-def mostrar_nombre_y_dato_jugadores (lista:list, constante, dato:str)->bool:
-    '''
-    - Muestra el nombre y el dato pasado por parametro.
-    - Recibe una lista, una constante para formatear el print y
-      y el dato.
-    - No retorna nada.
-    '''
-    for jugador in lista:
-        #print(jugador)
-        print("Nombre: {0} - {1}: {2}".format(jugador["nombre"], constante, jugador["estadisticas"][dato]))
-        
-# lista_mayores = (obtener_mayores (lista_jugadores, "20"))
-# mostrar_nombre_y_dato_jugadores (lista_mayores, "Promedio puntos por Partido", "promedio_puntos_por_partido")
-
-#11 Permitir al usuario ingresar un valor y mostrar los jugadores 
-# que han promediado más rebotes por partido que ese valor
-def obtener_mayores (lista_jugadores:list, numero:str)->list:
-    '''
-    -
-    '''
-    retorno = None
-    nueva_lista = []
-    numero = float(numero)
-    
-    if lista_jugadores != []:
-        for jugador in lista_jugadores:
-            for valor in jugador["estadisticas"]:
-                if valor == "promedio_rebotes_por_partido" and jugador["estadisticas"][valor] > numero:
-                    nueva_lista.append(jugador)
-                    retorno = nueva_lista
-                    #print(retorno)
-    return retorno
-            
-def mostrar_nombre_y_dato_jugadores (lista:list, constante, dato:str)->bool:
-    '''
-    - Muestra el nombre y el dato pasado por parametro.
-    - Recibe una lista, una constante para formatear el print y
-      y el dato.
-    - No retorna nada.
-    '''
-    for jugador in lista:
-        print("Nombre: {0} - {1}: {2}".format(jugador["nombre"], constante, jugador["estadisticas"][dato]))
-        
-# lista_mayores = (obtener_mayores (lista_jugadores, "5")) #12 rompe -- validar
-# mostrar_nombre_y_dato_jugadores (lista_mayores, "Promedio rebotes por Partido", "promedio_rebotes_por_partido")
-
-#12) Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado
-#más asistencias por partido que ese valor
-def obtener_mayores (lista_jugadores:list, numero:str)->list:
-    '''
-    -
-    '''
-    retorno = None
-    nueva_lista = []
-    numero = float(numero)
-    
-    if lista_jugadores != []:
-        for jugador in lista_jugadores:
-            for valor in jugador["estadisticas"]:
-                if valor == "promedio_asistencias_por_partido" and jugador["estadisticas"][valor] > numero:
-                    nueva_lista.append(jugador)
-                    retorno = nueva_lista
-                    #print(retorno)
-    return retorno
-            
-def mostrar_nombre_y_dato_jugadores (lista:list, constante, dato:str)->bool:
-    '''
-    - Muestra el nombre y el dato pasado por parametro.
-    - Recibe una lista, una constante para formatear el print y
-      y el dato.
-    - No retorna nada.
-    '''
-    for jugador in lista:
-        print("Nombre: {0} - {1}: {2}".format(jugador["nombre"], constante, jugador["estadisticas"][dato]))
-        
-# lista_mayores = (obtener_mayores (lista_jugadores, "9")) #12 rompe -- validar
-# mostrar_nombre_y_dato_jugadores (lista_mayores, "Promedio asistencias por Partido", "promedio_asistencias_por_partido")
-
-#13 Calcular y mostrar el jugador con la mayor cantidad de robos totales.
-def obtener_jugador_mayor_dato (lista_jugadores:list, dato:str)->dict:
-    '''
-    -
-    '''
-    retorno = None
-    mayor_dato = 0
-        
-    if lista_jugadores != []:
-        for jugador in lista_jugadores:
-            for valor in jugador["estadisticas"]:
-                if valor == dato and jugador["estadisticas"][valor] > mayor_dato:
-                        mayor_dato = jugador["estadisticas"][valor]
-                        retorno = jugador
-        return retorno
-
-# jugador = obtener_jugador_mayor_dato(lista_jugadores, "robos_totales")
-# print("Nombre: {0} - Robos totales: {1}".format(jugador["nombre"], jugador["estadisticas"]["robos_totales"]))
-
-#14 Calcular y mostrar el jugador con la mayor cantidad de bloqueos totales
-def obtener_jugador_mayor_dato (lista_jugadores:list, dato:str)->dict:
-    '''
-    -
-    '''
-    retorno = None
-    mayor_dato = 0
-        
-    if lista_jugadores != []:
-        for jugador in lista_jugadores:
-            for valor in jugador["estadisticas"]:
-                if valor == dato and jugador["estadisticas"][valor] > mayor_dato:
-                        mayor_dato = jugador["estadisticas"][valor]
-                        retorno = jugador
-        return retorno
-
-# jugador = obtener_jugador_mayor_dato(lista_jugadores, "bloqueos_totales")
-# print("Nombre: {0} - Bloqueos totales: {1}".format(jugador["nombre"], jugador["estadisticas"]["bloqueos_totales"]))
-
-#15 Permitir al usuario ingresar un valor y mostrar los jugadores 
-# que hayan tenido un porcentaje de tiros libres superior a ese valor.
-
-def obtener_mayores (lista_jugadores:list, numero:str)->list:
-    '''
-    -
-    '''
-    retorno = None
-    nueva_lista = []
-    numero = float(numero)
-    
-    if lista_jugadores != []:
-        for jugador in lista_jugadores:
-            for valor in jugador["estadisticas"]:
-                if valor == "porcentaje_tiros_libres" and jugador["estadisticas"][valor] > numero:
-                    nueva_lista.append(jugador)
-                    retorno = nueva_lista
-                    #print(retorno)
-    return retorno
-            
-def mostrar_nombre_y_dato_jugadores (lista:list, constante, dato:str)->bool:
-    '''
-    - Muestra el nombre y el dato pasado por parametro.
-    - Recibe una lista, una constante para formatear el print y
-      y el dato.
-    - No retorna nada.
-    '''
-    for jugador in lista:
-        print("Nombre: {0} - {1}: {2}".format(jugador["nombre"], constante, jugador["estadisticas"][dato]))
-        
-# lista_mayores = (obtener_mayores (lista_jugadores, "86")) #89 rompe -- validar
-# mostrar_nombre_y_dato_jugadores (lista_mayores, "Porcentaje de tiros libres", "porcentaje_tiros_libres")
-
-#Calcular y mostrar el promedio de puntos por partido del equipo 
-# excluyendo al jugador con la menor cantidad de puntos por partido
-
-def jugador_menores_puntos_por_partido (lista_jugadores:list)->dict:
-    '''
-    -
-    '''
-    retorno = None
-    menor_dato = 0
-    flag_primer_jugador = True    
-        
-    if lista_jugadores != []:
-        for jugador in lista_jugadores:
-            for valor in jugador["estadisticas"]:
-                if valor == "promedio_puntos_por_partido" and flag_primer_jugador == True:
-                    flag_primer_jugador = False
-                    menor_dato = jugador["estadisticas"]["promedio_puntos_por_partido"]
-                elif valor == "promedio_puntos_por_partido" and jugador["estadisticas"]["promedio_puntos_por_partido"] < menor_dato:
-                    menor_dato = jugador["estadisticas"]["promedio_puntos_por_partido"]
-                    #print(menor_dato)
-                    retorno = jugador
-    return retorno
-
-#jugador_menos_puntos = jugador_menores_puntos_por_partido(lista_jugadores)
-#print(jugador_menos_puntos)
-
-def obtener_mejores_promedios (lista_jugadores:list, jugador_menos_puntos:dict)->list:
-    '''
-    -
-    '''
-    retorno = None
-    lista_mejores_promedios = []
-    
-    if lista_jugadores != []:
-        for jugador in lista_jugadores:
-            if jugador["nombre"] != jugador_menos_puntos["nombre"]:
-                lista_mejores_promedios.append(jugador)
-                retorno = lista_mejores_promedios
-    return retorno
-           
-#lista_mejores_promedios = obtener_mejores_promedios(lista_jugadores, jugador_menos_puntos)
+#05 Calcular y mostrar el promedio de puntos por partido de todo 
+# el equipo del Dream Team, ordenado por nombre de manera ascendente.
 
 def obtener_promedio_puntos_partidos_del_equipo (lista:list, dato:str)->float:
     ''' 
@@ -572,19 +269,8 @@ def obtener_promedio_puntos_partidos_del_equipo (lista:list, dato:str)->float:
     
     return retorno
 
-#print(obtener_promedio_puntos_partidos_del_equipo (lista_mejores_promedios, "promedio_puntos_por_partido"))
-
-#17 Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos
-
-
-
-
-
-
-
-
-
-#===================================================================================
+# promedio = obtener_promedio_puntos_partidos_del_equipo (lista_jugadores, "promedio_puntos_por_partido")
+# print("Promedio de puntos por partido del equipo: {:.2f}".format(promedio))
 
 def ordenar_por_key (lista_jugadores:list, dato:str, orden:bool=True)->list:
     '''
@@ -613,4 +299,228 @@ def ordenar_por_key (lista_jugadores:list, dato:str, orden:bool=True)->list:
         
     return retorno
 
-#print(ordenar_por_key(lista_jugadores, ""))
+# lista_ordenada = ordenar_por_key(lista_jugadores, "nombre")
+# mostrar_nombres_y_datos(lista_ordenada, "Posicion", "posicion")
+
+def es_miembro_salon_de_la_fama (lista_jugadores:list, nombre:str)->bool:
+    '''
+    - Evalua si el jugador buscado es miembro del salon de la fama.
+    - Recibe una lista de jugadores y el nombre a evaluar.
+    - Retorna None si la lista esta vacia. False si no es miembro y
+      True si es miembro.
+      
+    '''
+    retorno = None
+    
+    if lista_jugadores != []:
+        retorno = False
+        for jugador in lista_jugadores:
+            if re.search(nombre, jugador["nombre"], re.I) != None:
+                for valor in jugador["logros"]:
+                    if re.search("miembro", valor, re.I) != None:
+                        retorno = True
+    return retorno
+
+#print(es_miembro_salon_de_la_fama (lista_jugadores, "michael"))
+#07 Calcular y mostrar el jugador con la mayor cantidad de rebotes totales
+
+def obtener_jugador_mayor_dato (lista_jugadores:list, dato:str)->dict:
+    '''
+    - Obtiene el jugador con el mayor valor segun el dato obtenido
+      por parametro.
+    - Recibe una lista y un dato a evaluar.
+    - Retorna None si la lista esta vacia sino retorna un jugador.
+    '''
+    retorno = None
+    mayor_dato = 0
+        
+    if lista_jugadores != []:
+        for jugador in lista_jugadores:
+            for valor in jugador["estadisticas"]:
+                if valor == dato and jugador["estadisticas"][valor] > mayor_dato:
+                        mayor_dato = jugador["estadisticas"][valor]
+                        retorno = jugador
+        return retorno
+
+def mostrar_jugador_nombre_dato (jugador:dict, constante:str, dato:str)->bool:
+    '''
+    - Muestra el nombre y el dato de un jugador.
+    - Recibe por parametro una jugador, una constante para formatear el
+      print y el dato.
+    - Si la lista esta vacia retorna False sino retorna True.  
+    '''
+    retorno = False
+    if jugador != {}:
+        print("Nombre: {0} - {1}: {2}".format(jugador["nombre"], constante, jugador["estadisticas"][dato]))
+        retorno = True
+    return retorno
+
+# jugador = obtener_jugador_mayor_dato(lista_jugadores, "rebotes_totales")
+# mostrar_jugador_nombre_dato (jugador, "Rebotes totales", "rebotes_totales")
+             
+#08 Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo
+
+# jugador = obtener_jugador_mayor_dato(lista_jugadores, "porcentaje_tiros_de_campo")
+# mostrar_jugador_nombre_dato(jugador, "Porcentaje tiros de campo", "porcentaje_tiros_de_campo")
+
+#09 Calcular y mostrar el jugador con la mayor cantidad de asistencias totales
+
+# jugador = obtener_jugador_mayor_dato(lista_jugadores, "asistencias_totales")
+# mostrar_jugador_nombre_dato(jugador, "Asistencias totales", "asistencias_totales")
+
+#10 Permitir al usuario ingresar un valor y mostrar los jugadores 
+# que han promediado más puntos por partido que ese valor
+def obtener_mayores (lista_jugadores:list, estadistica:str, numero:str)->list:
+    '''
+    - Obtiene una lista de jugadores donde se evalua que la estadistica
+      sea mayor al numero ingresado por el usuario.
+    - Obtiene por parametro una lista, la estadistica a evaluar y el numero
+      ingresado por el usuario.
+    - Si la lista esta vacia retorna None. Caso contrario retorna una lista
+      con los jugadores que cumplan con los datos evaluados.
+    '''
+    retorno = None
+    nueva_lista = []
+    numero = float(numero)
+    
+    if lista_jugadores != []:
+        for jugador in lista_jugadores:
+            for valor in jugador["estadisticas"]:
+                if valor == estadistica and jugador["estadisticas"][valor] > numero:
+                    nueva_lista.append(jugador)
+                    retorno = nueva_lista
+    return retorno
+
+def mostrar_nombre_y_dato_jugadores (lista:list, constante, dato:str)->bool:
+    '''
+    - Muestra el nombre y el dato pasado por parametro.
+    - Recibe una lista, una constante para formatear el print y
+      y el dato.
+    - No retorna nada.
+    '''
+    for jugador in lista:
+        #print(jugador)
+        print("Nombre: {0} - {1}: {2}".format(jugador["nombre"], constante, jugador["estadisticas"][dato]))
+        
+# lista_mayores = (obtener_mayores (lista_jugadores, "promedio_puntos_por_partido", "30"))#31 rompe
+# mostrar_nombre_y_dato_jugadores (lista_mayores, "Promedio puntos por Partido", "promedio_puntos_por_partido")
+
+#11 Permitir al usuario ingresar un valor y mostrar los jugadores 
+# que han promediado más rebotes por partido que ese valor
+ 
+# lista_mayores = (obtener_mayores (lista_jugadores, "promedio_rebotes_por_partido", "11")) #12 rompe -- validar
+# mostrar_nombre_y_dato_jugadores (lista_mayores, "Promedio rebotes por Partido", "promedio_rebotes_por_partido")
+
+#12) Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado
+#más asistencias por partido que ese valor
+
+# lista_mayores = (obtener_mayores (lista_jugadores, "promedio_asistencias_por_partido", "11")) #12 rompe -- validar
+# mostrar_nombre_y_dato_jugadores (lista_mayores, "Promedio asistencias por Partido", "promedio_asistencias_por_partido")
+
+#13 Calcular y mostrar el jugador con la mayor cantidad de robos totales.
+
+# jugador = obtener_jugador_mayor_dato(lista_jugadores, "robos_totales")
+# mostrar_jugador_nombre_dato(jugador, "Robos totales", "robos_totales")
+
+#14 Calcular y mostrar el jugador con la mayor cantidad de bloqueos totales
+
+# jugador = obtener_jugador_mayor_dato(lista_jugadores, "bloqueos_totales")
+# mostrar_jugador_nombre_dato(jugador, "Bloqueos totales", "bloqueos_totales")
+
+#15 Permitir al usuario ingresar un valor y mostrar los jugadores 
+# que hayan tenido un porcentaje de tiros libres superior a ese valor.
+
+# lista_mayores = (obtener_mayores (lista_jugadores, "porcentaje_tiros_libres", "86")) #89 rompe -- validar
+# mostrar_nombre_y_dato_jugadores (lista_mayores, "Porcentaje de tiros libres", "porcentaje_tiros_libres")
+
+#Calcular y mostrar el promedio de puntos por partido del equipo 
+# excluyendo al jugador con la menor cantidad de puntos por partido
+
+def jugador_menores_puntos_por_partido (lista_jugadores:list)->dict:
+    '''
+    - Obtiene el jugador con menos puntos por partido.
+    - Recibe un lista de jugadores.
+    - Retorna None si la lista esta vacia sino retorna un jugador.
+    '''
+    retorno = None
+    menor_dato = 0
+    flag_primer_jugador = True    
+        
+    if lista_jugadores != []:
+        for jugador in lista_jugadores:
+            for valor in jugador["estadisticas"]:
+                if valor == "promedio_puntos_por_partido" and flag_primer_jugador == True:
+                    flag_primer_jugador = False
+                    menor_dato = jugador["estadisticas"]["promedio_puntos_por_partido"]
+                elif valor == "promedio_puntos_por_partido" and jugador["estadisticas"]["promedio_puntos_por_partido"] < menor_dato:
+                    menor_dato = jugador["estadisticas"]["promedio_puntos_por_partido"]
+                    #print(menor_dato)
+                    retorno = jugador
+    return retorno
+
+jugador_menos_puntos = jugador_menores_puntos_por_partido(lista_jugadores)
+#print(jugador_menos_puntos)
+
+def obtener_mejores_promedios (lista_jugadores:list, jugador_menos_puntos:dict)->list:
+    '''
+    - Obtiene los mejores promedios de puntos por partido.
+    - Recibe un lista de jugadores y el jugador con menos puntos por partido.
+    - Retorna None si la lista esta vacia sino retorna una lista
+      sin el jugador con menos puntos por partido.
+    '''
+    retorno = None
+    lista_mejores_promedios = []
+    
+    if lista_jugadores != []:
+        for jugador in lista_jugadores:
+            if jugador["nombre"] != jugador_menos_puntos["nombre"]:
+                lista_mejores_promedios.append(jugador)
+                retorno = lista_mejores_promedios
+    return retorno
+           
+# lista_mejores_promedios = obtener_mejores_promedios(lista_jugadores, jugador_menos_puntos)
+# promedio = obtener_promedio_puntos_partidos_del_equipo (lista_mejores_promedios, "promedio_puntos_por_partido")
+# print("Promedio de puntos por partido del equipo: {:.2f}".format(promedio))
+
+#17 Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos
+def obtener_jugador_mayores_logros (lista_jugadores:list)->dict:
+    '''
+    - Obtiene el jugador con los mayores logros.
+    - Recibe una lista de jugadores.
+    - Retorna None si la lista esta vacia sino retorna un jugador.
+    '''
+    retorno = None
+    mayores_cantidad_logros = 0
+    
+    if lista_jugadores != []:
+        for jugador in lista_jugadores:
+            if len(jugador["logros"]) > mayores_cantidad_logros:
+                mayores_cantidad_logros = len(jugador["logros"])
+                retorno = jugador
+            
+    return retorno
+        
+#print(obtener_jugador_mayores_logros(lista_jugadores))
+
+#18 Permitir al usuario ingresar un valor y mostrar los jugadores 
+# que hayan tenido un porcentaje de tiros triples superior a ese valor.
+
+# lista_mayores = (obtener_mayores (lista_jugadores, "porcentaje_tiros_triples", "40")) #89 rompe -- validar
+# mostrar_nombre_y_dato_jugadores (lista_mayores, "Porcentaje de tiros triples", "porcentaje_tiros_triples")
+
+#19 Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas
+
+jugador = obtener_jugador_mayor_dato(lista_jugadores, "temporadas")            
+mostrar_jugador_nombre_dato(jugador, "Temporadas", "temporadas")
+
+#20 Permitir al usuario ingresar un valor y mostrar los jugadores , ordenados por
+#posición en la cancha, que hayan tenido un porcentaje de tiros de campo superior a ese valor.
+
+lista_mayores = obtener_mayores (lista_jugadores, "porcentaje_tiros_de_campo", "51") #89 rompe -- validar
+mostrar_nombre_y_dato_jugadores (lista_mayores, "Porcentaje de tiros de campo", "porcentaje_tiros_de_campo")
+
+lista_ordenada = ordenar_por_key(lista_mayores, "posicion")
+mostrar_nombres_y_datos (lista_ordenada, "Posicion", "posicion")
+
+
+#===================================================================================
