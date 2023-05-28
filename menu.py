@@ -42,7 +42,7 @@ cantidad de logros obtenidos.")
 tenido un porcentaje de tiros triples superior a un valor ingresado.")
     funciones.imprimir_dato("19. Mostrar el jugador con la mayor \
 cantidad de temporadas jugadas.")    
-    funciones.imprimir_dato("20. Mostrar los jugadores ordenados por\
+    funciones.imprimir_dato("20. Mostrar los jugadores ordenados por \
 posicion en la cancha, que hayan tenido un porcentaje de tiros \n    \
 de campo superior a un valor ingresado.")
     funciones.imprimir_dato("23. Mostrar y guardar la posicion de cada \
@@ -205,13 +205,37 @@ def dream_team_app (lista:list):
                         promedio = funciones.obtener_promedio_puntos_partidos_del_equipo (lista_mejores_promedios, "promedio_puntos_por_partido")
                         print("Promedio de puntos por partido del equipo: {:.2f}".format(promedio))                                                                       
                 case "17":
-                        pass                                                       
+                        jugador_con_mas_logros = funciones.obtener_jugador_mayores_logros (lista)
+                        print("Jugador con la mayor cantidad de logros:\nNombre: {0} - Logros: {1}".format(jugador_con_mas_logros["nombre"], len(jugador_con_mas_logros["logros"])))                                                                                                                            
                 case "18":
-                        pass                                    
+                        while True:
+                            valor_ingresado = input("\nIngrese un valor (debe ser menor/igual a '48') ó '0' para salir.\n")
+                            if funciones.es_entero(valor_ingresado) != None and funciones.es_entero(valor_ingresado) != "0":
+                                valor_ingresado = int(valor_ingresado)
+                                if valor_ingresado > 0 and valor_ingresado <= 48:
+                                    valor_ingresado = str(valor_ingresado)
+                                    lista_mayores = (funciones.obtener_mayores (lista, "porcentaje_tiros_triples", valor_ingresado)) #49 rompe -- validar
+                                    funciones.mostrar_nombre_y_dato_jugadores (lista_mayores, "Porcentaje de tiros triples", "porcentaje_tiros_triples")
+                            elif funciones.es_entero(valor_ingresado) == "0":
+                                break
+                            else:
+                                print("ERROR! La opcion ingresada es incorrecta.\n")                                  
                 case "19":
-                        pass                                    
+                        jugador = funciones.obtener_jugador_mayor_dato(lista, "temporadas")            
+                        funciones.mostrar_jugador_nombre_dato(jugador, "Temporadas", "temporadas")                                    
                 case "20":
-                        pass
+                        while True:
+                            valor_ingresado = input("\nIngrese un valor (debe ser menor/igual a '53') ó '0' para salir.\n")
+                            if funciones.es_entero(valor_ingresado) != None and funciones.es_entero(valor_ingresado) != "0":
+                                valor_ingresado = int(valor_ingresado)
+                                if valor_ingresado > 0 and valor_ingresado <= 53:
+                                    valor_ingresado = str(valor_ingresado)
+                                    lista_mayores = (funciones.obtener_mayores (lista, "porcentaje_tiros_triples", valor_ingresado)) #54 rompe -- validar
+                                    funciones.mostrar_nombre_y_dato_jugadores (lista_mayores, "Porcentaje de tiros de campo", "porcentaje_tiros_de_campo")
+                            elif funciones.es_entero(valor_ingresado) == "0":
+                                break
+                            else:
+                                print("ERROR! La opcion ingresada es incorrecta.\n")
                 case "23":
                         pass                                        
                 case "0":

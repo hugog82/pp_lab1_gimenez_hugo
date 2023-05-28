@@ -357,7 +357,37 @@ def es_miembro_salon_de_la_fama (lista_jugadores:list, nombre:str)->bool:
                         retorno = True
     return retorno
 
-#07 Calcular y mostrar el jugador con la mayor cantidad de rebotes totales
+def normalizar_datos (lista_jugadores)->list:
+    '''
+    - Convierte los datos a float en caso correspondiente.
+    - Recibe una lista.
+    - Si la lista esta vacia retorna None sino retorna la lista
+      normalizada.
+    '''
+    retorno = None
+    lista_normalizada = []
+    
+    if lista_jugadores != []:
+        for jugador in lista_jugadores:
+            for valor in jugador["estadisticas"]:
+                if jugador["estadisticas"]["promedio_puntos_por_partido"] != type(float)\
+                or jugador["estadisticas"]["promedio_rebotes_por_partido"] != type(float)\
+                or jugador["estadisticas"]["promedio_asistencias_por_partido"] != type(float)\
+                or jugador["estadisticas"]["porcentaje_tiros_de_campo"] != type(float)\
+                or jugador["estadisticas"]["porcentaje_tiros_libres"] != type(float)\
+                or jugador["estadisticas"]["porcentaje_tiros_triples"] != type(float):
+                    jugador["estadisticas"]["promedio_puntos_por_partido"] = float(jugador["estadisticas"]["promedio_puntos_por_partido"])
+                    jugador["estadisticas"]["promedio_rebotes_por_partido"] = float(jugador["estadisticas"]["promedio_rebotes_por_partido"])
+                    jugador["estadisticas"]["promedio_asistencias_por_partido"] = float(jugador["estadisticas"]["promedio_asistencias_por_partido"])
+                    jugador["estadisticas"]["porcentaje_tiros_de_campo"] = float(jugador["estadisticas"]["porcentaje_tiros_de_campo"])
+                    jugador["estadisticas"]["porcentaje_tiros_libres"] = float(jugador["estadisticas"]["porcentaje_tiros_libres"])
+                    jugador["estadisticas"]["porcentaje_tiros_triples"] = float(jugador["estadisticas"]["porcentaje_tiros_triples"])
+                    lista_normalizada.append(jugador)
+                else:
+                    lista_normalizada.append(jugador)
+                retorno = lista_normalizada
+        return retorno
+print(normalizar_datos(lista_jugadores))
 
 def obtener_jugador_mayor_dato (lista_jugadores:list, dato:str)->dict:
     '''
@@ -367,15 +397,20 @@ def obtener_jugador_mayor_dato (lista_jugadores:list, dato:str)->dict:
     - Retorna None si la lista esta vacia sino retorna un jugador.
     '''
     retorno = None
-    mayor_dato = 0
+    mayor_dato = 0.0
         
     if lista_jugadores != []:
         for jugador in lista_jugadores:
             for valor in jugador["estadisticas"]:
-                if valor == dato and jugador["estadisticas"][valor] > mayor_dato:
-                        mayor_dato = jugador["estadisticas"][valor]
-                        retorno = jugador
+                print(valor)
+                if jugador["estadisticas"][valor] != type(float):
+                    jugador["estadisticas"][valor] = float(jugador["estadisticas"][valor])
+                    if valor == dato and jugador["estadisticas"][valor] > mayor_dato:
+                            mayor_dato = jugador["estadisticas"][valor]
+                            retorno = jugador
         return retorno
+    
+#print(obtener_jugador_mayor_dato(lista_jugadores, "porcentaje_tiros_de_campo"))
 
 def mostrar_jugador_nombre_dato (jugador:dict, constante:str, dato:str)->bool:
     '''
@@ -390,18 +425,6 @@ def mostrar_jugador_nombre_dato (jugador:dict, constante:str, dato:str)->bool:
         retorno = True
     return retorno
            
-#08 Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo
-
-# jugador = obtener_jugador_mayor_dato(lista_jugadores, "porcentaje_tiros_de_campo")
-# mostrar_jugador_nombre_dato(jugador, "Porcentaje tiros de campo", "porcentaje_tiros_de_campo")
-
-#09 Calcular y mostrar el jugador con la mayor cantidad de asistencias totales
-
-# jugador = obtener_jugador_mayor_dato(lista_jugadores, "asistencias_totales")
-# mostrar_jugador_nombre_dato(jugador, "Asistencias totales", "asistencias_totales")
-
-#10 Permitir al usuario ingresar un valor y mostrar los jugadores 
-# que han promediado más puntos por partido que ese valor
 def obtener_mayores (lista_jugadores:list, estadistica:str, numero:str)->list:
     '''
     - Obtiene una lista de jugadores donde se evalua que la estadistica
@@ -433,8 +456,6 @@ def mostrar_nombre_y_dato_jugadores (lista:list, constante, dato:str)->bool:
     for jugador in lista:
         print("Nombre: {0} - {1}: {2}".format(jugador["nombre"], constante, jugador["estadisticas"][dato]))
         
-
-
 def jugador_menores_puntos_por_partido (lista_jugadores:list)->dict:
     '''
     - Obtiene el jugador con menos puntos por partido.
@@ -492,23 +513,12 @@ def obtener_jugador_mayores_logros (lista_jugadores:list)->dict:
             
     return retorno
         
-#print(obtener_jugador_mayores_logros(lista_jugadores))
 
-#18 Permitir al usuario ingresar un valor y mostrar los jugadores 
-# que hayan tenido un porcentaje de tiros triples superior a ese valor.
-
-# lista_mayores = (obtener_mayores (lista_jugadores, "porcentaje_tiros_triples", "40")) #89 rompe -- validar
-# mostrar_nombre_y_dato_jugadores (lista_mayores, "Porcentaje de tiros triples", "porcentaje_tiros_triples")
-
-#19 Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas
-
-# jugador = obtener_jugador_mayor_dato(lista_jugadores, "temporadas")            
-# mostrar_jugador_nombre_dato(jugador, "Temporadas", "temporadas")
 
 # 20 Permitir al usuario ingresar un valor y mostrar los jugadores , ordenados por
 # posición en la cancha, que hayan tenido un porcentaje de tiros de campo superior a ese valor.
 
-# lista_mayores = obtener_mayores (lista_jugadores, "porcentaje_tiros_de_campo", "51") #89 rompe -- validar
+# lista_mayores = obtener_mayores (lista_jugadores, "porcentaje_tiros_de_campo", "50") #54 rompe -- validar
 # mostrar_nombre_y_dato_jugadores (lista_mayores, "Porcentaje de tiros de campo", "porcentaje_tiros_de_campo")
 
 # lista_ordenada = ordenar_por_key(lista_mayores, "posicion")
@@ -516,3 +526,5 @@ def obtener_jugador_mayores_logros (lista_jugadores:list)->dict:
 
 
 #===================================================================================
+
+
