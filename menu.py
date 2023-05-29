@@ -103,35 +103,40 @@ def dream_team_app (lista:list):
                         nombre_csv = funciones.formatear_nombre_a_guardar(jugador_a_guardar)
                         dato_a_guardar = funciones.parser_csv(jugador_a_guardar)
                         funciones.guardar_archivo(nombre_csv, dato_a_guardar)
-                case "4":#falta validar mejor
+                case "4":
                         funciones.mostrar_nombres_y_datos(lista, "Posicion", "posicion")
                         while True:
-                            nombre = input("\nIngrese el nombre del jugador ó 'salir' para volver al menu anterior.\n")
-                            if funciones.obtener_logros_jugador(lista, nombre) != None:
-                                jugador = funciones.obtener_logros_jugador(lista, nombre)
-                                funciones.mostrar_logros_jugador(jugador)
-                                print(input("Presione enter para continuar..."))
-                                funciones.mostrar_nombres_y_datos(lista, "Posicion", "posicion")                             
-                            else:
-                                print("No se encontro al jugador...")
+                            nombre = input("\nIngrese el nombre del jugador o 'salir' para volver al menu anterior.:\n")
+                            if funciones.es_solo_texto(nombre) and nombre != "salir":
+                                if funciones.obtener_logros_jugador(lista, nombre) != None:
+                                    jugador = funciones.obtener_logros_jugador(lista, nombre)
+                                    funciones.mostrar_logros_jugador(jugador)
+                                    print(input("Presione enter para continuar..."))
+                                    funciones.mostrar_nombres_y_datos(lista, "Posicion", "posicion")
+                                else:
+                                    print("No se encontro al jugador...")
+                            elif funciones.es_solo_texto(nombre) and nombre == "salir":
                                 break
+                            else:
+                                print("ERROR! El nombre ingresado es incorrecto.\n")
                 case "5":
                         promedio = funciones.obtener_promedio_puntos_partidos_del_equipo (lista, "promedio_puntos_por_partido")
                         print("Promedio de puntos por partido del equipo: {:.2f}\nJugadores:".format(promedio))
                         lista_ordenada = funciones.ordenar_por_key(lista, "nombre")
                         funciones.mostrar_nombres_y_datos(lista_ordenada, "Posicion", "posicion")
-                case "6": #falta validar mejor
+                case "6":
                         funciones.mostrar_nombres_y_datos(lista, "Posicion", "posicion")
                         while True:
                             nombre = input("\nIngrese el nombre del jugador: ó 'salir' para volver al menu anterior.\n")
-                            if funciones.es_solo_texto(nombre):
+                            if funciones.es_solo_texto(nombre) and nombre != "salir":
                                 if funciones.es_miembro_salon_de_la_fama (lista, nombre):
                                     print("Es miembro del salon de la fama.\n")                             
                                 else:
                                     print("No es miembro.")
-                                    break
+                            elif funciones.es_solo_texto(nombre) and nombre == "salir":
+                                break
                             else:
-                                print("ERROR! La opcion ingresada es incorrecta.\n")
+                                print("ERROR! El nombre ingresado es incorrecto.\n")
                 case "7":
                         jugador = funciones.obtener_jugador_mayor_dato(lista, "rebotes_totales")
                         funciones.mostrar_jugador_nombre_dato (jugador, "Rebotes totales", "rebotes_totales")                          
@@ -200,7 +205,7 @@ def dream_team_app (lista:list):
                             else:
                                 print("ERROR! La opcion ingresada es incorrecta.\n")
                 case "16":
-                        jugador_menos_puntos = funciones.jugador_menores_puntos_por_partido(lista)
+                        jugador_menos_puntos = funciones.obtener_jugador_menores_puntos_por_partido(lista)
                         lista_mejores_promedios = funciones.obtener_mejores_promedios(lista, jugador_menos_puntos)
                         promedio = funciones.obtener_promedio_puntos_partidos_del_equipo (lista_mejores_promedios, "promedio_puntos_por_partido")
                         print("Promedio de puntos por partido del equipo: {:.2f}".format(promedio))                                                                       
@@ -221,8 +226,8 @@ def dream_team_app (lista:list):
                             else:
                                 print("ERROR! La opcion ingresada es incorrecta.\n")                                  
                 case "19":
-                        jugador = funciones.obtener_jugador_mayor_dato(lista, "temporadas")            
-                        funciones.mostrar_jugador_nombre_dato(jugador, "Temporadas", "temporadas")                                    
+                        jugador = funciones.obtener_jugadores_mayores_temporadas (lista)            
+                        funciones.mostrar_nombre_y_dato_jugadores(jugador, "Temporadas", "temporadas")                                    
                 case "20":
                         while True:
                             valor_ingresado = input("\nIngrese un valor (debe ser menor/igual a '53') ó '0' para salir.\n")
@@ -230,8 +235,11 @@ def dream_team_app (lista:list):
                                 valor_ingresado = int(valor_ingresado)
                                 if valor_ingresado > 0 and valor_ingresado <= 53:
                                     valor_ingresado = str(valor_ingresado)
-                                    lista_mayores = (funciones.obtener_mayores (lista, "porcentaje_tiros_triples", valor_ingresado)) #54 rompe -- validar
-                                    funciones.mostrar_nombre_y_dato_jugadores (lista_mayores, "Porcentaje de tiros de campo", "porcentaje_tiros_de_campo")
+                                    lista_mayores = (funciones.obtener_mayores (lista, "porcentaje_tiros_de_campo", valor_ingresado))
+                                    funciones.mostrar_nombre_y_dato_jugadores (lista_mayores, "Porcentaje tiros de campo", "porcentaje_tiros_de_campo")
+                                    print(" ")
+                                    lista_ordenada = funciones.ordenar_por_key(lista_mayores, "posicion")
+                                    funciones.mostrar_nombres_y_datos (lista_ordenada, "Posicion", "posicion")
                             elif funciones.es_entero(valor_ingresado) == "0":
                                 break
                             else:
