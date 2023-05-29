@@ -76,7 +76,8 @@ def dream_team_app (lista:list):
     '''
     retorno = False
     
-    if lista != []:    
+    if lista != []:
+        bandera_case_dos = False    
         while True:
             opcion = menu_principal_dream_team ()
             match opcion:
@@ -85,24 +86,29 @@ def dream_team_app (lista:list):
                 case "2":
                         funciones.mostrar_indice_y_nombre(lista)
                         while True:
-                            indice = input("\nIngrese el indice ó 'v' para volver al menu anterior: ")
-                            if funciones.es_entero(indice) != None:
+                            indice = input("\nIngrese el indice ó '0' para volver al menu anterior: ")
+                            if funciones.es_entero(indice) != None and indice != "0":
                                 indice = int(indice)
+                                indice = indice - 1
                                 if indice >= 0 and indice < 12:
                                     indice = str(indice)
                                     jugador_a_guardar = funciones.mostrar_estadisticas_jugador(lista, indice)
+                                    bandera_case_dos = True
                                 else:
                                     print("ERROR! La opcion ingresada es incorrecta.\n")
                                     funciones.mostrar_indice_y_nombre(lista) 
-                            elif funciones.es_letra(indice) == "v" or funciones.es_letra(indice) == "V":
+                            elif funciones.es_entero(indice) == "0":
                                 break
                             else:
                                 print("ERROR! La opcion ingresada es incorrecta.\n")
                                 funciones.mostrar_indice_y_nombre(lista)
                 case "3":
-                        nombre_csv = funciones.formatear_nombre_a_guardar(jugador_a_guardar)
-                        dato_a_guardar = funciones.parser_csv(jugador_a_guardar)
-                        funciones.guardar_archivo(nombre_csv, dato_a_guardar)
+                        if bandera_case_dos:
+                            nombre_csv = funciones.formatear_nombre_a_guardar(jugador_a_guardar)
+                            dato_a_guardar = funciones.parser_csv(jugador_a_guardar)
+                            funciones.guardar_archivo(nombre_csv, dato_a_guardar)
+                        else:
+                            print("Ingreso denegado! Debe elegir primero un jugador de la opcion 2. ")
                 case "4":
                         funciones.mostrar_nombres_y_datos(lista, "Posicion", "posicion")
                         while True:

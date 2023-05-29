@@ -1,6 +1,6 @@
-import funciones
-import menu
+from funciones import leer_archivo_json
+from menu import dream_team_app
 
-lista_jugadores = funciones.leer_archivo_json("./pp_lab1_gimenez_hugo/dt.json")
+lista_jugadores = leer_archivo_json("./pp_lab1_gimenez_hugo/dt.json")
 
-menu.dream_team_app (lista_jugadores)
+dream_team_app (lista_jugadores)

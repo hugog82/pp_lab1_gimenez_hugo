@@ -16,24 +16,6 @@ def es_entero (cadena:str)->None:
     
     return retorno
 
-def es_letra (cadena:str)->str:
-    '''
-    - Evalua si el primer caracter recibido es una letra.
-    - Obtiene una cadena por parametro.
-    - En caso de haber mas de un caracter retorna solo el primero
-      y solo si es valido.
-    - Retorna None si no es una letra o la cadena esta vacia.
-    '''
-    retorno = None
-    respuesta = re.match(r'([a-zA-Z]{1})', cadena)
-    
-    if cadena == "" or respuesta == None:
-        retorno
-    else:
-        retorno = respuesta.group(1)
-
-    return retorno
-
 def es_solo_texto (cadena:str)->bool:
     '''
     - Busca palabras donde todos sus caracteres sean alfabeticos.
@@ -76,8 +58,6 @@ def leer_archivo_json (nombre_archivo:str)->list:
 
     return retorno
 
-lista_jugadores = leer_archivo_json("./pp_lab1_gimenez_hugo/dt.json")
-
 def mostrar_nombres_y_datos(lista:list, constante, dato:str)->bool:
     '''
     - Muestra una lista de nombre y datos.
@@ -102,7 +82,7 @@ def mostrar_indice_y_nombre (lista:list)->bool:
        
     if lista != []:
         for indice in range(len(lista)):
-            print("Indice: {0} - Nombre: {1}".format(indice, lista[indice]["nombre"]))
+            print("Indice: {0} - Nombre: {1}".format(indice+1, lista[indice]["nombre"]))
         retorno = True
         
     return retorno
@@ -280,7 +260,6 @@ def dividir(dividendo:int, divisor:int):
     
     return retorno
  
-
 def obtener_promedio_puntos_partidos_del_equipo (lista:list, dato:str)->float:
     ''' 
     - Calcula el promedio del dato recibido en la lista.
@@ -333,7 +312,6 @@ def es_miembro_salon_de_la_fama (lista_jugadores:list, nombre:str)->bool:
     - Recibe una lista de jugadores y el nombre a evaluar.
     - Retorna None si la lista esta vacia. False si no es miembro y
       True si es miembro.
-      
     '''
     retorno = None
     
@@ -494,48 +472,3 @@ def obtener_jugadores_mayores_temporadas (lista_jugadores:list)->list:
 #=====================================================================
 
 #23 Bonus
-
-def ordenar_por_estadistica (lista_jugadores:list, dato:str, orden:bool=True)->list:
-    '''
-    - Ordena la lista segun el dato/key de forma ascendente o descendente.
-    - Recibe una lista por parametro, el dato a ordenar y el tipo de orden.
-    - True = Ascendente o False = Descendente.
-    - Retorna la lista ordenada.
-    - Si la lista esta vacia retorna None.
-    '''
-    retorno = None
-    
-    if lista_jugadores != []:
-        if len(lista_jugadores) > 1:
-            rango_a = len(lista_jugadores)
-            flag_swap = True
-
-            while(flag_swap):
-                flag_swap = False
-                rango_a = rango_a - 1
-
-                for indice_a in range(rango_a):
-                    if  orden == False and lista_jugadores[indice_a]["estadisticas"][dato] < lista_jugadores[indice_a+1]["estadisticas"][dato] \
-                    or orden == True and lista_jugadores[indice_a]["estadisticas"][dato] > lista_jugadores[indice_a+1]["estadisticas"][dato]:
-                        lista_jugadores[indice_a]["estadisticas"][dato],lista_jugadores[indice_a+1]["estadisticas"][dato] = lista_jugadores[indice_a+1]["estadisticas"][dato],lista_jugadores[indice_a]["estadisticas"][dato]
-                        flag_swap = True
-        retorno = lista_jugadores
-        
-    return retorno
-lista_ordenada_puntos = ordenar_por_estadistica (lista_jugadores, "puntos_totales", False)
-lista_ordenada_rebotes = ordenar_por_estadistica (lista_jugadores, "rebotes_totales", False)
-lista_asistencias_rebotes = ordenar_por_estadistica (lista_jugadores, "asistencias_totales", False)
-lista_robos_rebotes = ordenar_por_estadistica (lista_jugadores, "robos_totales", False)
-
-def rankear_jugador (lista:list)->dict:
-    '''
-    -
-    '''
-    ranking_jugador = {}
-    
-    for indice, jugador in enumerate(lista):
-        if jugador["estadisticas"]["puntos_totales"] == jugador["estadisticas"]["puntos_totales"]:
-            print("Nombre: {0} - Posicion puntos: {1} - Puntos: {2}".format(jugador["nombre"], indice+1, jugador["estadisticas"]["puntos_totales"]))
-
-rankear_jugador(lista_ordenada_puntos)        
-
