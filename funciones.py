@@ -58,9 +58,11 @@ def leer_archivo_json (nombre_archivo:str)->list:
 
     return retorno
 
+lista_jugadores = leer_archivo_json("./pp_lab1_gimenez_hugo/dt.json")
+
 def mostrar_nombres_y_datos(lista:list, constante, dato:str)->bool:
     '''
-    - Muestra una lista de nombre y datos.
+    - Muestra una lista de nombres y datos.
     - Recibe por parametro una lista, una constante para formatear el
       print y el dato.
     - Si la lista esta vacia retorna False.
@@ -167,6 +169,7 @@ def parser_csv(jugador:dict)->str:
         retorno = cabecera + datos
         
     return retorno
+
         
 def guardar_archivo(nombre_archivo:str,contenido:str)->int:
     '''
@@ -176,9 +179,9 @@ def guardar_archivo(nombre_archivo:str,contenido:str)->int:
     - Compara el retorno del metodo write y lo compara con el len
       del contenido. Si son igual muestra un mensaje de exito.
     - En caso de no coincidir muestra un mensaje de error.
-    - Si el objeto contenido esta vacio retorna -1, sino retorna 0.
+    - Si el objeto contenido esta vacio retorna False, sino retorna True.
     '''
-    retorno = -1
+    retorno = False
     if contenido != "":    
         with open(nombre_archivo,"w") as archivo:
             valor = archivo.write(contenido)
@@ -186,7 +189,7 @@ def guardar_archivo(nombre_archivo:str,contenido:str)->int:
                 print("El archivo se guardo correctamente!")
             else:
                 print("ERROR: No se pudo guardar el archivo!")
-        retorno = 0
+        retorno = True
         
     return retorno
 
@@ -209,7 +212,7 @@ def obtener_logros_jugador(jugadores:list, nombre:str)->list:
             
     return retorno
 
-def mostrar_logros_jugador (jugador:dict)->bool:
+def mostrar_logros_jugador (jugador:dict):
     '''
     - Muestra los logros de un jugador.
     - Recibe un diccionario.
@@ -252,9 +255,9 @@ def dividir(dividendo:int, divisor:int):
     - Retorna la division entre los parametros.
     - Si el divisor es igual a 0 retorna 0.
     '''
-    retorno = divisor
+    retorno = None
 
-    if divisor != 0:
+    if divisor != None:
         resultado = dividendo / divisor
         retorno = resultado
     
@@ -316,11 +319,11 @@ def es_miembro_salon_de_la_fama (lista_jugadores:list, nombre:str)->bool:
     retorno = None
     
     if lista_jugadores != []:
-        retorno = False
         for jugador in lista_jugadores:
             if re.search(nombre, jugador["nombre"], re.I) != None:
                 for valor in jugador["logros"]:
-                    if re.search("miembro", valor, re.I) != None:
+                    retorno = False
+                    if re.search(r"^Miembro del Salon de la Fama del Baloncesto$", valor, re.I) != None:
                         retorno = True
     return retorno
 
@@ -332,9 +335,9 @@ def obtener_jugador_mayor_dato (lista_jugadores:list, dato:str)->dict:
     - Retorna None si la lista esta vacia sino retorna un jugador.
     '''
     retorno = None
-    mayor_dato = 0
-        
+           
     if lista_jugadores != []:
+        mayor_dato =  lista_jugadores[0]["estadisticas"][valor]
         for jugador in lista_jugadores:
             for valor in jugador["estadisticas"]:
                 if valor == dato and jugador["estadisticas"][valor] > mayor_dato:
@@ -472,3 +475,171 @@ def obtener_jugadores_mayores_temporadas (lista_jugadores:list)->list:
 #=====================================================================
 
 #23 Bonus
+
+def ordenar_por_clave_doble(lista: list[dict], clave1: str, clave2: str, flag_orden: bool) -> list[dict]:
+    """
+    La función ordena una lista de diccionarios por dos claves específicas en orden ascendente o descendente.
+
+    :param lista: Una lista de diccionarios que se ordenarán según los valores de dos claves específicas en cada diccionario.
+    :type lista: list[dict]
+    :param clave1: La primera clave o atributo de los diccionarios en la lista que se utilizará para ordenarla.
+    :type clave1: str
+    :param clave2: La segunda clave o atributo de los diccionarios en la lista que se utilizará para ordenarla.
+    :type clave2: str
+    :param flag_orden: Indica si la lista debe ordenarse en orden ascendente (True) o descendente (False)
+    :type flag_orden: bool
+    :return: Una nueva lista que contiene los mismos diccionarios que la lista de entrada, pero ordenados
+             según los valores de las claves especificadas y el orden indicado por el flag_orden.
+    """
+
+    lista_nueva = lista[:]
+    n = len(lista_nueva)
+    flag_swap = True
+
+    while flag_swap:
+        flag_swap = False
+        for indice_A in range(n - 1):
+            if (flag_orden and lista_nueva[indice_A][clave1][clave2] > lista_nueva[indice_A + 1][clave1][clave2]) or \
+                    (not flag_orden and lista_nueva[indice_A][clave1][clave2] < lista_nueva[indice_A + 1][clave1][clave2]):
+                lista_nueva[indice_A], lista_nueva[indice_A + 1] = lista_nueva[indice_A + 1], lista_nueva[indice_A]
+                flag_swap = True
+
+    return lista_nueva
+
+def obtener_jugadores_con_estadisticas_ordenadas(lista_jugadores:list[dict])-> list[dict]:
+    """
+    Esta función toma una lista de diccionarios que representan a los jugadores de baloncesto y sus
+    estadísticas, ordena a los jugadores por diferentes estadísticas y devuelve una nueva lista de
+    diccionarios con los nombres de los jugadores y sus clasificaciones en cada estadística.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a los jugadores de baloncesto y
+    sus estadísticas
+    :type lista_jugadores: list[dict]
+    :return: una lista de diccionarios con las estadísticas modificadas de los jugadores, donde cada
+    diccionario contiene el nombre del jugador y sus estadísticas actualizadas para cada categoría
+    (rebotes, asistencias, robos y puntos).
+    """
+    
+    lista_copia = lista_jugadores[:]
+
+    lista_estadisticas = ["rebotes_totales", "asistencias_totales", "robos_totales", "puntos_totales"]
+    for estadistaca in lista_estadisticas:
+        lista_ordenada = ordenar_por_clave_doble(lista_copia,"estadisticas" ,estadistaca , False)
+        jugadores_con_estadisticas = []
+
+        for i in range(len(lista_ordenada)):
+            jugador = lista_ordenada[i]
+            nombre = jugador["nombre"]
+            jugador["estadisticas"][estadistaca] = i + 1
+            jugador_modificado = {
+                "nombre": nombre,
+                "estadisticas": jugador["estadisticas"]
+            }
+            #print(jugador_modificado)
+            jugadores_con_estadisticas.append(jugador_modificado)
+            #print(jugadores_con_estadisticas)
+
+    return jugadores_con_estadisticas
+
+ranking = obtener_jugadores_con_estadisticas_ordenadas(lista_jugadores)
+
+def mostrar_ranking (lista_rankig:list)->list:
+    '''
+    -
+    '''
+    retorno = False
+    
+    if lista_rankig != []:
+        print("Nombre\t\t\tPuntos\tRebotes\tAsistencias\tRobos")
+        for jugador in lista_rankig:
+            print("{0}\t\t {1}\t {2}\t {3}\t\t {4}".format(jugador["nombre"], \
+                jugador["estadisticas"]["puntos_totales"], \
+                jugador["estadisticas"]["rebotes_totales"], \
+                jugador["estadisticas"]["asistencias_totales"], \
+                jugador["estadisticas"]["robos_totales"]))
+            retorno = True 
+    return retorno
+        
+
+#mostrar_ranking (ranking)
+
+def obtener_cantidad_posiciones (lista:list)->dict:
+    '''
+    -
+    '''
+    retorno = None
+    dict_cantidad_posiciones = {}
+    escolta = 0
+    base = 0
+    ala_pivot = 0
+    alero = 0
+    pivot = 0
+    
+    if lista != []:
+        for jugador in lista:
+            if jugador["posicion"] == "Escolta":
+                escolta += 1
+            elif jugador["posicion"] == "Base":
+                base += 1
+            elif jugador["posicion"] == "Ala-Pivot":
+                ala_pivot += 1
+            elif jugador["posicion"] == "Alero":
+                alero += 1
+            else:
+                pivot +=1
+        dict_cantidad_posiciones['escolta'] = escolta
+        dict_cantidad_posiciones['base'] = base
+        dict_cantidad_posiciones["ala_pivot"] = ala_pivot
+        dict_cantidad_posiciones["alero"] = alero
+        dict_cantidad_posiciones["pivot"] = pivot
+        
+    retorno = dict_cantidad_posiciones
+    return retorno
+
+lista_cantidad_posiciones = obtener_cantidad_posiciones(lista_jugadores)
+    
+def mostrar_cantidad_posiciones (lista:list):
+    '''
+    -
+    '''
+    if lista != []:
+        for posicion in lista:
+            print("{0} - {1}".format(posicion.capitalize(), lista[posicion], end="\n"))
+
+#mostrar_cantidad_posiciones(lista_cantidad_posiciones)
+
+def obtener_cantidad_all_star (lista:list)->list:
+    '''
+    -
+    '''
+    retorno = None
+    lista_all_star = []
+    
+    if lista != []:
+        for jugador in lista:
+            for valor in jugador["logros"]:
+                if re.search(r"All-Star", valor, re.I) != None:
+                    dict_aux = {}
+                    dict_aux["nombre"] = jugador["nombre"]
+                    valor = re.search(r"\d+", valor, re.I)
+                    cantidad = valor.group()
+                    dict_aux["cantidad_all_star"] = int(cantidad)
+                    lista_all_star.append(dict_aux)
+                    
+        retorno = lista_all_star
+    return retorno                
+                
+lista_all_star = obtener_cantidad_all_star(lista_jugadores)
+
+lista_ordenada = ordenar_por_key(lista_all_star, "cantidad_all_star", False)
+
+def mostrar_lista_ordenada (lista:list):
+    '''
+    -
+    '''
+    if lista != []:
+        for jugador in lista:
+            print("{0} - {1} veces All Star".format(jugador["nombre"], jugador["cantidad_all_star"], end="\n"))
+
+mostrar_lista_ordenada(lista_ordenada)
+

@@ -136,7 +136,9 @@ def dream_team_app (lista:list):
                             nombre = input("\nIngrese el nombre del jugador: ó 'salir' para volver al menu anterior.\n")
                             if funciones.es_solo_texto(nombre) and nombre != "salir":
                                 if funciones.es_miembro_salon_de_la_fama (lista, nombre):
-                                    print("Es miembro del salon de la fama.\n")                             
+                                    print("Es miembro del salon de la fama.\n")
+                                elif funciones.es_miembro_salon_de_la_fama (lista, nombre) == None:
+                                    print("ERROR! El nombre ingresado es incorrecto.\n")
                                 else:
                                     print("No es miembro.")
                             elif funciones.es_solo_texto(nombre) and nombre == "salir":
